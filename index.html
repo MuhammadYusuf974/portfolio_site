@@ -22,29 +22,6 @@
       cursor: none;
     }
 
-    .cursor-dot {
-      width: 15px;
-      height: 15px;
-      background: #0ff;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-    }
-
-    .cursor-ring {
-      width: 30px;
-      height: 30px;
-      border: 2px solid #0ff;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: 9998;
-      transition: all 0.15s ease;
-    }
-
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -68,6 +45,12 @@
       align-items: center;
       backdrop-filter: blur(5px);
       box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+      animation: fadeDown 1s ease-in-out;
+    }
+
+    @keyframes fadeDown {
+      0% { transform: translateY(-100%); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
 
     .logo {
@@ -90,10 +73,22 @@
       text-decoration: none;
       font-size: 1rem;
       transition: color 0.3s;
+      position: relative;
     }
 
-    nav ul li a:hover {
-      color: #0ff;
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #0ff;
+      transition: width 0.3s;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
     }
 
     section {
@@ -109,6 +104,13 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+      animation: popUp 2s ease-in-out;
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .typewriter {
@@ -139,7 +141,9 @@
       border: 3px solid #0ff;
       object-fit: cover;
       transition: transform 0.5s;
+      box-shadow: 0 0 20px #0ff7;
     }
+
     .profile-img:hover {
       transform: rotate(2deg) scale(1.05);
     }
@@ -167,6 +171,7 @@
       border: 1px solid #0ff;
       transition: 0.3s ease;
     }
+
     .skills li:hover {
       transform: scale(1.05);
       background: #0ff;
@@ -185,10 +190,12 @@
       margin: 20px 0;
       border-radius: 12px;
       border: 1px solid #0ff;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s;
     }
+
     .projects .project:hover {
       transform: scale(1.03);
+      box-shadow: 0 0 20px #0ff5;
     }
 
     .projects .project img {
@@ -198,6 +205,7 @@
       object-fit: cover;
       max-height: 200px;
     }
+
     .projects .project img:hover {
       box-shadow: 0 0 20px #0ff7;
       transition: 0.4s ease;
@@ -224,6 +232,7 @@
       font-weight: bold;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 0 10px #0ff7;
     }
 
     form button::after {
@@ -237,6 +246,7 @@
       transform: skewX(-20deg);
       transition: 0.5s;
     }
+
     form button:hover::after {
       left: 125%;
     }
@@ -246,24 +256,38 @@
       transform: translateY(40px);
       transition: all 0.6s ease-out;
     }
+
     .fade-in.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    @keyframes shine {
-      0% { background-position: -200%; }
-      100% { background-position: 200%; }
+    #cursor {
+      width: 20px;
+      height: 20px;
+      background: #0ff;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
     }
   </style>
 </head>
 <body>
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
+  <div id="cursor"></div>
 
-  <!-- rest of your HTML stays the same -->
+  <!-- ...rest of your HTML remains unchanged... -->
 
   <script>
+    // Cursor follower
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
     // Typewriter
     const typeEl = document.querySelector('.typewriter');
     const text = "Hi, I’m Yusuf – Frontend Developer";
@@ -304,6 +328,7 @@
     scrollBtn.style.fontSize = '1.2rem';
     scrollBtn.style.cursor = 'pointer';
     scrollBtn.style.display = 'none';
+    scrollBtn.style.boxShadow = '0 0 15px #0ff9';
     document.body.appendChild(scrollBtn);
 
     scrollBtn.addEventListener('click', () => {
@@ -311,15 +336,6 @@
     });
     window.addEventListener('scroll', () => {
       scrollBtn.style.display = window.scrollY > 400 ? 'block' : 'none';
-    });
-
-    // Custom cursor
-    const dot = document.querySelector('.cursor-dot');
-    const ring = document.querySelector('.cursor-ring');
-
-    window.addEventListener('mousemove', e => {
-      dot.style.left = ring.style.left = `${e.clientX}px`;
-      dot.style.top = ring.style.top = `${e.clientY}px`;
     });
   </script>
 </body>
